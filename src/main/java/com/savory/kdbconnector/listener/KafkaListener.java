@@ -1,29 +1,52 @@
 package com.savory.kdbconnector.listener;
 
-import static com.kx.c.td;
+import static com.savory.kdbconnector.driver.c.td;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
-import com.kx.c;
 
 @Component
 public class KafkaListener {
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    //
+    @PostConstruct
+    public void listen() throws SQLException, IOException, com.savory.kdbconnector.driver.c.KException {
+        PreparedStatement preparedStatement = jdbcTemplate.getDataSource().getConnection().prepareStatement("select from ?");
+        preparedStatement.setString(1, "tab");
+//        System.out.println("a");
+        ResultSet resultSet = preparedStatement.executeQuery();
+        System.out.println("a");
+    }
 //
-//    @PostConstruct
-//    public void listen() throws SQLException, IOException, c.KException {
+    private static final ResultSetExtractor<String> extractor =  a -> "";
+//        @Override
+//        public List<String> extractData(ResultSet rs) throws SQLException {
+//
+//            List<String> list = new ArrayList<>();
+//            while (rs.next()) {
+//                list.add("a");
+//            }
+//            return list;
+//        }
+//    });
+
 //        c kdbServer = new c("localhost",5001);
 //        // create a row (array of objects)
 //        Object[] row= {new Time(System.currentTimeMillis()%86400000), "IBM", new Double(93.5), new Integer(300)};

@@ -1,6 +1,7 @@
 package com.savory.kdbconnector;
 
-import static com.kx.c.td;
+
+import static com.savory.kdbconnector.driver.c.td;
 
 import java.io.File;
 import java.sql.Time;
@@ -13,10 +14,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.kx.c;
+import com.savory.kdbconnector.driver.c;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class KdbConnectorApplicationTests {
 
     private static String OS = System.getProperty("os.name").toLowerCase();
@@ -26,32 +27,33 @@ public class KdbConnectorApplicationTests {
     @Test
     public void contextLoads() throws Exception{
 
-        if (isWindows()) {
-            System.out.println("This is Windows");
-        } else if (isMac()) {
-            System.out.println("This is Mac");
-        } else if (isUnix()) {
-            System.out.println("This is Unix or Linux");
-        } else {
-            System.out.println("Your OS is not support!!");
-        }
-
-
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("kdb/q.exe").getFile());
-
-        ProcessBuilder p = new ProcessBuilder();
-        p.command(file.getAbsolutePath(), "-p", "5001");
-        process = p.start();
-
+//        if (isWindows()) {
+//            System.out.println("This is Windows");
+//        } else if (isMac()) {
+//            System.out.println("This is Mac");
+//        } else if (isUnix()) {
+//            System.out.println("This is Unix or Linux");
+//        } else {
+//            System.out.println("Your OS is not support!!");
+//        }
+//
+//
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        File file = new File(classLoader.getResource("kdb/q.exe").getFile());
+//
+//        ProcessBuilder p = new ProcessBuilder();
+//        p.command(file.getAbsolutePath(), "-p", "5001");
+//        process = p.start();
+//
         c kdbServer = new c("localhost",5001);
 
 
-        Object[] row= {new Time(System.currentTimeMillis()%86400000), "IBM", new Double(93.5), new Integer(300)};
+//        Object[] row= {new Time(System.currentTimeMillis()%86400000), "IBM", new Double(93.5), new Integer(300)};
         // insert the row into the trade table
-        kdbServer.ks("insert","trade", row);
+//        kdbServer.ks("insert","trade", row);
+        kdbServer.k("tab");
         // send a sync message (see below for an explanation)
-        kdbServer.k("");
+//        kdbServer.k("");
         // execute a query in the server that returns a table
         c.Flip table = td(kdbServer.k("select sum size by sym from trade"));
         kdbServer.close();
